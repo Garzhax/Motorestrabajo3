@@ -4,6 +4,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f; // Velocidad de movimiento
     public CharacterController controller; // Referencia al componente CharacterController
+    public GameOverManager gameOverManager; // Referencia al script de Game Over.
 
     void Start()
     {
@@ -22,5 +23,14 @@ public class PlayerMovement : MonoBehaviour
 
         // Aplicar el movimiento usando el CharacterController
         controller.Move(move * speed * Time.deltaTime);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.gameObject.CompareTag("Enemy")) // Verifica el Tag del objeto colisionado.
+        {
+            Debug.Log("Colisión detectada con enemigo"); // Mensaje de depuración.
+            gameOverManager.GameOver(); // Llama al método de Game Over.
+        }
     }
 }
