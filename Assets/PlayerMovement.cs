@@ -1,36 +1,32 @@
+
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f; // Velocidad de movimiento
-    public CharacterController controller; // Referencia al componente CharacterController
-    public GameOverManager gameOverManager; // Referencia al script de Game Over.
+    private Animator animator;
 
     void Start()
     {
-        // Obtén el CharacterController adjunto al jugador
-        controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        // Capturar las teclas de movimiento
-        float horizontal = Input.GetAxis("Horizontal"); // Movimiento izquierda/derecha (A/D)
-        float vertical = Input.GetAxis("Vertical");     // Movimiento adelante/atrás (W/S)
-
-        // Crear el vector de movimiento basado en la entrada del usuario
-        Vector3 move = transform.right * horizontal + transform.forward * vertical;
-
-        // Aplicar el movimiento usando el CharacterController
-        controller.Move(move * speed * Time.deltaTime);
-    }
-
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        if (hit.gameObject.CompareTag("Enemy")) // Verifica el Tag del objeto colisionado.
+        // Activar correr
+        if (Input.GetAxis("Vertical") != 0 || Input.GetAxis("Horizontal") != 0)
         {
-            Debug.Log("Colisión detectada con enemigo"); // Mensaje de depuración.
-            gameOverManager.GameOver(); // Llama al método de Game Over.
+            animator.SetBool("isRunning", true);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+        }
+
+        // Activar salto
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetTrigger("Jump");
         }
     }
 }
+
